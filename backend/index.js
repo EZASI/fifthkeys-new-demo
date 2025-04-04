@@ -24,8 +24,18 @@ const mongoOptions = {
   autoIndex: true,
 };
 
-// Default MongoDB URI (can be overridden by environment variable)
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/fifthkeys';
+// MongoDB URI with priority: MONGODB_URI > MONGO_URI > localhost
+const MONGO_URI = process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb://localhost:27017/fifthkeys';
+
+// --- BEGIN ADDED LOGGING ---
+console.log(`Attempting to connect to MongoDB with URI: ${MONGO_URI}`);
+// Check if the MONGODB_URI variable itself is set
+if (process.env.MONGODB_URI) {
+  console.log('process.env.MONGODB_URI is set.');
+} else {
+  console.log('process.env.MONGODB_URI is NOT set.');
+}
+// --- END ADDED LOGGING ---
 
 // Connect to MongoDB
 mongoose.connect(MONGO_URI, mongoOptions)
